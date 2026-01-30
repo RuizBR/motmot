@@ -60,24 +60,26 @@
       position: relative;
       z-index: 2;
       max-width: 850px;
-      width: 100%;
+      width: 90vw; /* responsive width */
       padding: 20px;
       text-align: center;
+      overflow-wrap: break-word;
     }
 
     .card {
       background: rgba(20, 20, 24, 0.9);
       border-radius: 25px;
-      padding: 50px 30px;
+      padding: 40px 20px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
       display: none;
       animation: fadeUp 1.2s ease forwards;
+      width: 100%;
     }
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-    h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #f5f5f7; margin-bottom: 20px; }
-    p { color: #e5e5ea; margin-bottom: 20px; }
+    h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #f5f5f7; margin-bottom: 20px; word-break: break-word; line-height: 1.4; }
+    p { color: #e5e5ea; margin-bottom: 20px; word-break: break-word; line-height: 1.4; }
 
     .btn {
       background: linear-gradient(135deg, #2b2b30, #3a3a42);
@@ -264,14 +266,21 @@
     document.getElementById('step2').style.display = 'none';
     document.getElementById('step3').style.display = 'none';
 
-    // Typewriter function
+    // Typewriter function with span to preserve spacing and responsiveness
     function typeWriter(elementId, speed = 50) {
       const el = document.getElementById(elementId);
       const text = el.getAttribute('data-text');
-      el.innerText = '';
+      el.innerHTML = '';
+      for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        span.innerText = text[i];
+        span.style.opacity = '0';
+        el.appendChild(span);
+      }
       let i = 0;
       const timer = setInterval(() => {
-        el.innerText += text.charAt(i);
+        const span = el.children[i];
+        span.style.opacity = '1';
         i++;
         if (i >= text.length) clearInterval(timer);
       }, speed);
@@ -282,7 +291,6 @@
       openBtn.style.display = 'none';              
       document.getElementById('step1').style.display = 'block'; 
       bgMusic.play().catch(e => console.log("Autoplay blocked:", e));
-
       typeWriter('step1-text', 80);
       typeWriter('step1-para', 50);
     });
