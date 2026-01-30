@@ -154,25 +154,26 @@
   #backFlowersBtn:hover { background: rgba(255,255,255,0.4); }
 
   /* Slideshow overlay */
-  #slideshowOverlay {
-    display:none;
-    position:fixed;
-    inset:0;
-    background: rgba(0,0,0,0.6); /* semi-transparent to show marquee behind */
-    z-index:10;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-  }
-  #slideshowOverlay img {
-    position:absolute; /* overlay above marquee */
-    max-width:80vw;
-    max-height:80vh;
-    object-fit:cover;
-    opacity:0;
-    transition:opacity 0.8s ease, transform 0.8s ease;
-  }
+#slideshowOverlay {
+  display:none;
+  position:absolute; /* not fixed */
+  inset:0;
+  background: rgba(0,0,0,0.3); /* semi-transparent so text/marquee is visible */
+  z-index:2; /* behind Step3 card z-index 2 */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none; /* allow clicking buttons behind */
+}
+
+#slideshowOverlay img {
+  max-width:80vw;
+  max-height:60vh;
+  object-fit:cover;
+  opacity:0;
+  transition:opacity 0.8s ease, transform 0.8s ease;
+}
+
 </style>
 </head>
 <body>
@@ -388,3 +389,4 @@ backFlowersBtn.addEventListener('click',()=>{
 </script>
 </body>
 </html>
+
