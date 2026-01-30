@@ -2,17 +2,19 @@ import streamlit as st
 import os
 import random
 
+# ================= Page Config =================
 st.set_page_config(page_title="Just For You ❤️", layout="wide")
 
 # ================= CSS =================
 st.markdown("""
 <style>
-/* Global */
 body {
     background: linear-gradient(135deg, #0b0b0d, #141418);
     color: #e5e5ea;
     font-family: 'Poppins', sans-serif;
     overflow-x: hidden;
+    margin:0;
+    padding:0;
 }
 
 /* Cards */
@@ -22,7 +24,7 @@ body {
     padding: 50px 30px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
     text-align: center;
-    margin: auto;
+    margin: 40px auto;
     max-width: 850px;
 }
 
@@ -94,10 +96,15 @@ p {
 </style>
 """, unsafe_allow_html=True)
 
-# ================= Helper Functions =================
+# ================= IMAGE SETUP =================
 IMAGE_FOLDER = "IMAGE"
 images = [os.path.join(IMAGE_FOLDER, f"{i}.jpeg") for i in range(1, 25)]
 
+# ================= Session State =================
+if 'step' not in st.session_state:
+    st.session_state.step = 1
+
+# ================= Helper Functions =================
 def display_collage(img_list):
     st.markdown('<div class="collage"><div class="collage-track">', unsafe_allow_html=True)
     for img in img_list:
@@ -121,10 +128,7 @@ def show_flowers():
         </div>
         """, unsafe_allow_html=True)
 
-# ================= Streamlit Steps =================
-if 'step' not in st.session_state:
-    st.session_state.step = 1
-
+# ================= APP LOGIC =================
 # Step 1
 if st.session_state.step == 1:
     st.markdown('<div class="card">', unsafe_allow_html=True)
@@ -132,7 +136,6 @@ if st.session_state.step == 1:
     st.markdown('<p>I made something just for you…</p>', unsafe_allow_html=True)
     if st.button("Tap to open your surprise ✨"):
         st.session_state.step = 2
-        st.experimental_rerun()
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Step 2
@@ -142,7 +145,6 @@ elif st.session_state.step == 2:
     st.markdown('<p>Just a short message before the surprise…</p>', unsafe_allow_html=True)
     if st.button("Read it 💗"):
         st.session_state.step = 3
-        st.experimental_rerun()
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Step 3
@@ -151,10 +153,9 @@ elif st.session_state.step == 3:
     st.markdown('<p>Every month with you is something I’m grateful for. Thank you for being my safe place, my comfort, and my favorite person. I’m excited for all the days we still get to share.</p>', unsafe_allow_html=True)
     display_collage(images)
     if st.button("Flower for you!!!! 🌸"):
-        show_flowers()
         st.session_state.step = 4
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Step 4 (floating flowers visible, cards hidden)
+# Step 4 (floating flowers visible)
 elif st.session_state.step == 4:
     show_flowers()
