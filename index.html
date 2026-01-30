@@ -92,7 +92,7 @@
     }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(255, 255, 255, 0.15); }
 
-    /* Simple open button before everything */
+    /* First Open button */
     #openBtn {
       background: none;
       color: #f5f5f7;
@@ -107,11 +107,11 @@
     #openBtn:hover { background: rgba(255,255,255,0.1); }
 
     .floating-flower {
-      position: fixed;
-      bottom: -80px;
-      z-index: 3;
       pointer-events: none;
       filter: drop-shadow(0 0 6px rgba(255, 200, 220, 0.6));
+      position: fixed;
+      bottom: -80px;
+      z-index: 9999;
     }
 
     @keyframes floatUp {
@@ -159,10 +159,9 @@
     <source src="IMAGES/aaaa.mp3" type="audio/mpeg">
   </audio>
 
-  <button id="openBtn">Open</button>
   <div class="container">
     <!-- First Open button -->
-    
+    <button id="openBtn">Open</button>
 
     <div class="card" id="step1">
       <h1>Hey Lab 💌</h1>
@@ -212,10 +211,10 @@
     const bgMusic = document.getElementById('bgMusic');
     const openBtn = document.getElementById('openBtn');
 
-    // Start everything on first Open button click
+    // First open button
     openBtn.addEventListener('click', () => {
-      openBtn.style.display = 'none';       // hide open button
-      document.getElementById('step1').style.display = 'block'; // show step1
+      openBtn.style.display = 'none';
+      document.getElementById('step1').style.display = 'block';
       bgMusic.play().catch(e => console.log("Autoplay blocked:", e));
     });
 
@@ -232,19 +231,24 @@
     }
 
     function showFlowers() {
-      document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
+      document.querySelectorAll('.card').forEach(c => c.style.display = 'block');
       document.getElementById('flowers').style.opacity = '1';
       document.querySelectorAll('.floating-flower').forEach(f => f.remove());
 
       const flowerEmojis = ['🌸','🌺','🌹','💮','🥀','🌻'];
-      for (let i = 0; i < 50; i++) {
+      const colors = ['#ff69b4', '#ff1493', '#ffb6c1', '#ff4500', '#ffd700', '#ff6347', '#da70d6'];
+
+      for (let i = 0; i < 60; i++) {
         const flower = document.createElement('div');
         flower.className = 'floating-flower';
-        flower.innerText = flowerEmojis[Math.floor(Math.random()*flowerEmojis.length)];
+        flower.innerText = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
         flower.style.left = Math.random() * 100 + 'vw';
         flower.style.fontSize = (1.5 + Math.random() * 3) + 'rem';
-        flower.style.animation = `floatUp ${6 + Math.random()*6}s linear forwards`;
-        flower.style.animationDelay = Math.random() * 2 + 's';
+        flower.style.color = colors[Math.floor(Math.random() * colors.length)];
+        const duration = 6 + Math.random() * 6;
+        const delay = Math.random() * 2;
+        flower.style.animation = `floatUp ${duration}s linear forwards`;
+        flower.style.animationDelay = `${delay}s`;
         document.body.appendChild(flower);
       }
     }
@@ -258,5 +262,3 @@
   </script>
 </body>
 </html>
-
-
