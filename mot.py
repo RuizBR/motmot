@@ -97,7 +97,7 @@ p {
 """, unsafe_allow_html=True)
 
 # ================= IMAGE SETUP =================
-IMAGE_FOLDER = "IMAGE"
+IMAGE_FOLDER = "IMAGES"
 images = [os.path.join(IMAGE_FOLDER, f"{i}.jpeg") for i in range(1, 25)]
 
 # ================= Session State =================
