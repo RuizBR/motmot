@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Just For You ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0b0b0d, #141418);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Background collage */
+    .bg-collage {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-auto-rows: 200px;
+      gap: 10px;
+      filter: blur(10px) brightness(0.5); /* less blurry */
+      animation: moveCollage 60s linear infinite;
+    }
+    .bg-collage img { width: 100%; height: 100%; object-fit: cover; }
+
+    @keyframes moveCollage {
+      0% { transform: translateX(0) translateY(0); }
+      50% { transform: translateX(-50px) translateY(-30px); }
+      100% { transform: translateX(0) translateY(0); }
+    }
+
+    .flowers-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(255,182,193,.25) 0 6px, transparent 7px),
+        radial-gradient(circle at 80% 30%, rgba(255,192,203,.3) 0 7px, transparent 8px),
+        radial-gradient(circle at 50% 70%, rgba(255,160,180,.25) 0 6px, transparent 7px),
+        radial-gradient(circle at 20% 80%, rgba(255,200,210,.3) 0 7px, transparent 8px);
+      background-size: 180px 180px;
+      animation: float 25s linear infinite;
+    }
+
+    @keyframes float { from { background-position: 0 0; } to { background-position: 400px 800px; } }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 850px;
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .card {
+      background: rgba(20, 20, 24, 0.9);
+      border-radius: 25px;
+      padding: 50px 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      display: none;
+      animation: fadeUp 1.2s ease forwards;
+    }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #f5f5f7; margin-bottom: 20px; }
+    p { color: #e5e5ea; margin-bottom: 20px; }
+
+    .btn { background: linear-gradient(135deg, #2b2b30, #3a3a42); color: #f5f5f7; border: none; padding: 14px 28px; font-size: 1rem; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(255, 255, 255, 0.15); }
+
+    .floating-flower {
+      position: fixed;
+      bottom: -80px;
+      z-index: 3;
+      animation: floatUp linear forwards;
+      pointer-events: none;
+      filter: drop-shadow(0 0 6px rgba(255, 200, 220, 0.6));
+    }
+
+    /* Moving collage inside message card */
+    .collage {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+    .collage-track {
+      display: flex;
+      animation: scrollCollage 15s linear infinite;
+    }
+    .collage img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 15px;
+      border: 2px solid #e5e5ea;
+      box-shadow: 0 5px 15px rgba(255,255,255,0.1);
+    }
+
+    @keyframes scrollCollage {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background collage -->
+  <div class="bg-collage" id="bgCollage">
+    <img src="C:\Users\Administrator\Pictures\mot\1.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\2.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\3.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\4.jpg" />
+    <img src="C:\Users\Administrator\Pictures\mot\5.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\6.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\7.jpg" />
+    <img src="C:\Users\Administrator\Pictures\mot\8.jpg" />
+    <img src="C:\Users\Administrator\Pictures\mot\9.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\10.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\11.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\12.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\13.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\14.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\15.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\16.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\17.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\18.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\19.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\20.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\21.jpg" />
+    <img src="C:\Users\Administrator\Pictures\mot\22.jpeg" />
+    <img src="C:\Users\Administrator\Pictures\mot\23.jpg" />
+    <img src="C:\Users\Administrator\Pictures\mot\24.jpeg" />
+  </div>
+
+  <div class="flowers-bg" id="flowers"></div>
+
+  <div class="container">
+    <div class="card" id="step1" style="display:block;">
+      <h1>Hey Lab 💌</h1>
+      <p>I made something just for you…</p>
+      <button class="btn" id="btnStart">Tap to open your surprise ✨</button>
+    </div>
+
+    <div class="card" id="step2">
+      <h1>Happy Monthsary ❤️</h1>
+      <p>Just a short message before the surprise…</p>
+      <button class="btn" onclick="showMessage()">Read it 💗</button>
+    </div>
+
+    <div class="card" id="step3">
+      <p>Every month with you is something I’m grateful for. Thank you for being my safe place, my comfort, and my favorite person. I’m excited for all the days we still get to share.</p>
+      <div class="collage">
+        <div class="collage-track">
+            <img src="C:\Users\Administrator\Pictures\mot\3.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\4.jpg" />
+            <img src="C:\Users\Administrator\Pictures\mot\5.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\6.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\7.jpg" />
+            <img src="C:\Users\Administrator\Pictures\mot\8.jpg" />
+            <img src="C:\Users\Administrator\Pictures\mot\9.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\10.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\11.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\12.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\13.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\14.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\15.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\16.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\17.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\18.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\19.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\20.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\21.jpg" />
+            <img src="C:\Users\Administrator\Pictures\mot\22.jpeg" />
+            <img src="C:\Users\Administrator\Pictures\mot\23.jpg" />
+            <img src="C:\Users\Administrator\Pictures\mot\24.jpeg" />
+        </div>
+      </div>
+      <button class="btn" onclick="showFlowers()">Flower for you!!!! 🌸</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('btnStart').addEventListener('click', showMonthsary);
+
+    function showMonthsary() {
+      document.getElementById('step1').style.display = 'none';
+      document.getElementById('step2').style.display = 'block';
+    }
+
+    function showMessage() {
+      document.getElementById('step2').style.display = 'none';
+      document.getElementById('step3').style.display = 'block';
+    }
+
+    function showFlowers() {
+      document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
+      document.getElementById('flowers').style.opacity = '1';
+
+      document.querySelectorAll('.floating-flower').forEach(f => f.remove());
+
+      for (let i = 0; i < 40; i++) {
+        const flower = document.createElement('div');
+        flower.className = 'floating-flower';
+        flower.innerText = ['🌸','🌺','🌹'][Math.floor(Math.random()*3)];
+        flower.style.left = Math.random() * 100 + 'vw';
+        flower.style.fontSize = (3.5 + Math.random() * 3) + 'rem';
+        flower.style.animationDuration = (8 + Math.random() * 10) + 's';
+        flower.style.animationDelay = Math.random() * 4 + 's';
+        document.body.appendChild(flower);
+      }
+    }
+  </script>
+</body>
+</html>
