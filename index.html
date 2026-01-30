@@ -86,9 +86,19 @@
       position: fixed;
       bottom: -80px;
       z-index: 3;
-      animation: floatUp linear forwards;
       pointer-events: none;
       filter: drop-shadow(0 0 6px rgba(255, 200, 220, 0.6));
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+      }
     }
 
     .collage {
@@ -164,28 +174,28 @@
       <p>Every month with you is something I’m grateful for. Thank you for being my safe place, my comfort, and my favorite person. I’m excited for all the days we still get to share.</p>
       <div class="collage">
         <div class="collage-track">
-            <img src="IMAGES/3.jpeg" />
-            <img src="IMAGES/4.jpg" />
-            <img src="IMAGES/5.jpeg" />
-            <img src="IMAGES/6.jpeg" />
-            <img src="IMAGES/7.jpg" />
-            <img src="IMAGES/8.jpg" />
-            <img src="IMAGES/9.jpeg" />
-            <img src="IMAGES/10.jpeg" />
-            <img src="IMAGES/11.jpeg" />
-            <img src="IMAGES/12.jpeg" />
-            <img src="IMAGES/13.jpeg" />
-            <img src="IMAGES/14.jpeg" />
-            <img src="IMAGES/15.jpeg" />
-            <img src="IMAGES/16.jpeg" />
-            <img src="IMAGES/17.jpeg" />
-            <img src="IMAGES/18.jpeg" />
-            <img src="IMAGES/19.jpeg" />
-            <img src="IMAGES/20.jpeg" />
-            <img src="IMAGES/21.jpg" />
-            <img src="IMAGES/22.jpeg" />
-            <img src="IMAGES/23.jpg" />
-            <img src="IMAGES/24.jpeg" />
+          <img src="IMAGES/3.jpeg" />
+          <img src="IMAGES/4.jpg" />
+          <img src="IMAGES/5.jpeg" />
+          <img src="IMAGES/6.jpeg" />
+          <img src="IMAGES/7.jpg" />
+          <img src="IMAGES/8.jpg" />
+          <img src="IMAGES/9.jpeg" />
+          <img src="IMAGES/10.jpeg" />
+          <img src="IMAGES/11.jpeg" />
+          <img src="IMAGES/12.jpeg" />
+          <img src="IMAGES/13.jpeg" />
+          <img src="IMAGES/14.jpeg" />
+          <img src="IMAGES/15.jpeg" />
+          <img src="IMAGES/16.jpeg" />
+          <img src="IMAGES/17.jpeg" />
+          <img src="IMAGES/18.jpeg" />
+          <img src="IMAGES/19.jpeg" />
+          <img src="IMAGES/20.jpeg" />
+          <img src="IMAGES/21.jpg" />
+          <img src="IMAGES/22.jpeg" />
+          <img src="IMAGES/23.jpg" />
+          <img src="IMAGES/24.jpeg" />
         </div>
       </div>
       <button class="btn" onclick="showFlowers()">Flower for you!!!! 🌸</button>
@@ -208,17 +218,17 @@
     function showFlowers() {
       document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
       document.getElementById('flowers').style.opacity = '1';
-
       document.querySelectorAll('.floating-flower').forEach(f => f.remove());
 
-      for (let i = 0; i < 40; i++) {
+      const flowerEmojis = ['🌸','🌺','🌹','💮','🥀','🌻'];
+      for (let i = 0; i < 50; i++) {
         const flower = document.createElement('div');
         flower.className = 'floating-flower';
-        flower.innerText = ['🌸','🌺','🌹'][Math.floor(Math.random()*3)];
+        flower.innerText = flowerEmojis[Math.floor(Math.random()*flowerEmojis.length)];
         flower.style.left = Math.random() * 100 + 'vw';
-        flower.style.fontSize = (3.5 + Math.random() * 3) + 'rem';
-        flower.style.animationDuration = (8 + Math.random() * 10) + 's';
-        flower.style.animationDelay = Math.random() * 4 + 's';
+        flower.style.fontSize = (1.5 + Math.random() * 3) + 'rem'; // random sizes
+        flower.style.animation = `floatUp ${6 + Math.random()*6}s linear forwards`;
+        flower.style.animationDelay = Math.random() * 2 + 's';
         document.body.appendChild(flower);
       }
     }
