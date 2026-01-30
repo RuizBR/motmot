@@ -79,7 +79,18 @@
     h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #f5f5f7; margin-bottom: 20px; }
     p { color: #e5e5ea; margin-bottom: 20px; }
 
-    .btn { background: linear-gradient(135deg, #2b2b30, #3a3a42); color: #f5f5f7; border: none; padding: 14px 28px; font-size: 1rem; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .btn {
+      background: linear-gradient(135deg, #2b2b30, #3a3a42);
+      color: #f5f5f7;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin-top: 15px;
+    }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(255, 255, 255, 0.15); }
 
     .floating-flower {
@@ -91,14 +102,8 @@
     }
 
     @keyframes floatUp {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-120vh) rotate(360deg);
-        opacity: 0;
-      }
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
     }
 
     .collage {
@@ -199,8 +204,14 @@
         </div>
       </div>
       <button class="btn" onclick="showFlowers()">Flower for you!!!! 🌸</button>
+      <button class="btn" onclick="goBack()">Back ⬅️</button>
     </div>
   </div>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" autoplay loop>
+    <source src="IMAGES/music.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     document.getElementById('btnStart').addEventListener('click', showMonthsary);
@@ -226,11 +237,18 @@
         flower.className = 'floating-flower';
         flower.innerText = flowerEmojis[Math.floor(Math.random()*flowerEmojis.length)];
         flower.style.left = Math.random() * 100 + 'vw';
-        flower.style.fontSize = (1.5 + Math.random() * 3) + 'rem'; // random sizes
+        flower.style.fontSize = (1.5 + Math.random() * 3) + 'rem';
         flower.style.animation = `floatUp ${6 + Math.random()*6}s linear forwards`;
         flower.style.animationDelay = Math.random() * 2 + 's';
         document.body.appendChild(flower);
       }
+    }
+
+    function goBack() {
+      document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
+      document.getElementById('step1').style.display = 'block';
+      document.getElementById('flowers').style.opacity = '0';
+      document.querySelectorAll('.floating-flower').forEach(f => f.remove());
     }
   </script>
 </body>
