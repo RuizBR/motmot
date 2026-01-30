@@ -60,7 +60,7 @@
       position: relative;
       z-index: 2;
       max-width: 850px;
-      width: 90vw; /* responsive width */
+      width: 90vw;
       padding: 20px;
       text-align: center;
       overflow-wrap: break-word;
@@ -94,7 +94,6 @@
     }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(255, 255, 255, 0.15); }
 
-    /* Open button */
     #openBtn {
       background: none;
       color: #f5f5f7;
@@ -126,6 +125,8 @@
       gap: 10px;
       margin-top: 20px;
       overflow: hidden;
+      justify-content: center;
+      transition: transform 1s ease;
     }
     .collage-track {
       display: flex;
@@ -138,6 +139,8 @@
       border-radius: 15px;
       border: 2px solid #e5e5ea;
       box-shadow: 0 5px 15px rgba(255,255,255,0.1);
+      opacity: 1;
+      transition: opacity 0.5s ease;
     }
 
     @keyframes scrollCollage {
@@ -145,7 +148,6 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* Back button for flower screen */
     #backFlowersBtn {
       position: fixed;
       top: 15px;
@@ -160,14 +162,12 @@
       cursor: pointer;
       display: none;
     }
-    #backFlowersBtn:hover {
-      background: rgba(255,255,255,0.4);
-    }
+    #backFlowersBtn:hover { background: rgba(255,255,255,0.4); }
   </style>
 </head>
 <body>
-  <!-- Background collage -->
   <div class="bg-collage" id="bgCollage">
+    <!-- Images 1-24 -->
     <img src="IMAGES/1.jpeg" />
     <img src="IMAGES/2.jpeg" />
     <img src="IMAGES/3.jpeg" />
@@ -197,29 +197,24 @@
   <div class="flowers-bg" id="flowers"></div>
 
   <div class="container">
-    <!-- Open button only visible initially -->
     <button id="openBtn">Open</button>
 
-    <!-- Step 1 -->
     <div class="card" id="step1">
       <h1 id="step1-text" data-text="Hey Lab 💌"></h1>
       <p id="step1-para" data-text="I made something just for you…"></p>
       <button class="btn" id="btnStart">Tap to open your surprise ✨</button>
     </div>
 
-    <!-- Step 2 -->
     <div class="card" id="step2">
       <h1 id="step2-text" data-text="Happy Monthsary ❤️"></h1>
       <p id="step2-para" data-text="Just a short message before the surprise…"></p>
       <button class="btn" onclick="showMessage()">Read it 💗</button>
     </div>
 
-    <!-- Step 3 -->
     <div class="card" id="step3">
       <p id="step3-para" data-text="Every month with you is something I’m grateful for. Thank you for being my safe place, my comfort, and my favorite person. I’m excited for all the days we still get to share."></p>
       <div class="collage">
         <div class="collage-track">
-          <!-- Collage images here -->
           <img src="IMAGES/3.jpeg" />
           <img src="IMAGES/4.jpg" />
           <img src="IMAGES/5.jpeg" />
@@ -244,14 +239,12 @@
           <img src="IMAGES/24.jpeg" />
         </div>
       </div>
-      <button class="btn" onclick="showFlowers()">Flower for you!!!! 🌸</button>
+      <button class="btn" onclick="showFlowers()" style="display:none">Flower for you!!!! 🌸</button>
     </div>
   </div>
 
-  <!-- Back button for flowers -->
   <button id="backFlowersBtn">⬅️</button>
 
-  <!-- Background Music -->
   <audio id="bgMusic" autoplay loop>
     <source src="IMAGES/aaaa.mp3" type="audio/mpeg">
   </audio>
@@ -261,94 +254,124 @@
     const openBtn = document.getElementById('openBtn');
     const backFlowersBtn = document.getElementById('backFlowersBtn');
 
-    // Hide all cards initially
     document.getElementById('step1').style.display = 'none';
     document.getElementById('step2').style.display = 'none';
     document.getElementById('step3').style.display = 'none';
 
-    // Typewriter function with span to preserve spacing and responsiveness
-    function typeWriter(elementId, speed = 50) {
-      const el = document.getElementById(elementId);
-      const text = el.getAttribute('data-text');
-      el.innerHTML = '';
-      for (let i = 0; i < text.length; i++) {
-        const span = document.createElement('span');
-        span.innerText = text[i];
-        span.style.opacity = '0';
-        el.appendChild(span);
-      }
-      let i = 0;
-      const timer = setInterval(() => {
-        const span = el.children[i];
-        span.style.opacity = '1';
-        i++;
-        if (i >= text.length) clearInterval(timer);
-      }, speed);
+    function typeWriterPromise(elementId, speed=50){
+      return new Promise(resolve=>{
+        const el = document.getElementById(elementId);
+        const text = el.getAttribute('data-text');
+        el.innerHTML = '';
+        for(let i=0;i<text.length;i++){
+          const span = document.createElement('span');
+          span.innerText = text[i];
+          span.style.opacity='0';
+          el.appendChild(span);
+        }
+        let i=0;
+        const timer = setInterval(()=>{
+          const span = el.children[i];
+          span.style.opacity='1';
+          i++;
+          if(i>=text.length){
+            clearInterval(timer);
+            resolve();
+          }
+        },speed);
+      });
     }
 
-    // Open button click: show first card + play music + typewriter
-    openBtn.addEventListener('click', () => {
-      openBtn.style.display = 'none';              
-      document.getElementById('step1').style.display = 'block'; 
-      bgMusic.play().catch(e => console.log("Autoplay blocked:", e));
-      typeWriter('step1-text', 80);
-      typeWriter('step1-para', 50);
+    openBtn.addEventListener('click', async()=>{
+      openBtn.style.display='none';
+      document.getElementById('step1').style.display='block';
+      bgMusic.play().catch(e=>console.log("Autoplay blocked:", e));
+      await typeWriterPromise('step1-text',80);
+      await typeWriterPromise('step1-para',50);
     });
 
-    // Start button: show step2
     document.getElementById('btnStart').addEventListener('click', showMonthsary);
 
-    function showMonthsary() {
-      document.getElementById('step1').style.display = 'none';
-      document.getElementById('step2').style.display = 'block';
-      typeWriter('step2-text', 80);
-      typeWriter('step2-para', 50);
+    async function showMonthsary(){
+      document.getElementById('step1').style.display='none';
+      document.getElementById('step2').style.display='block';
+      await typeWriterPromise('step2-text',80);
+      await typeWriterPromise('step2-para',50);
     }
 
-    function showMessage() {
-      document.getElementById('step2').style.display = 'none';
-      document.getElementById('step3').style.display = 'block';
-      typeWriter('step3-para', 40);
+    function goBack(){
+      document.querySelectorAll('.card').forEach(c=>c.style.display='none');
+      document.getElementById('step1').style.display='block';
+      document.getElementById('flowers').style.opacity='0';
+      document.querySelectorAll('.floating-flower').forEach(f=>f.remove());
+      backFlowersBtn.style.display='none';
+      typeWriterPromise('step1-text',80);
+      typeWriterPromise('step1-para',50);
     }
 
-    function showFlowers() {
-      document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
-      document.getElementById('flowers').style.opacity = '1';
-      document.querySelectorAll('.floating-flower').forEach(f => f.remove());
-      backFlowersBtn.style.display = 'block'; // show back button
+    async function showMessage(){
+      document.getElementById('step2').style.display='none';
+      await showStep3WithSlideshow();
+    }
 
-      const flowerEmojis = ['🌸','🌺','🌹','💮','🥀','🌻'];
-      for (let i = 0; i < 50; i++) {
-        const flower = document.createElement('div');
-        flower.className = 'floating-flower';
-        flower.innerText = flowerEmojis[Math.floor(Math.random()*flowerEmojis.length)];
-        flower.style.left = Math.random() * 100 + 'vw';
-        flower.style.fontSize = (1.5 + Math.random() * 3) + 'rem';
-        flower.style.animation = `floatUp ${6 + Math.random()*6}s linear forwards`;
-        flower.style.animationDelay = Math.random() * 2 + 's';
+    async function showStep3WithSlideshow(){
+      const step3 = document.getElementById('step3');
+      step3.style.display='block';
+      const collageTrack = step3.querySelector('.collage-track');
+
+      // Flower button hidden initially
+      const flowerBtn = step3.querySelector('.btn[onclick="showFlowers()"]');
+      flowerBtn.style.display='none';
+
+      // Start typewriter for paragraph
+      await typeWriterPromise('step3-para',40);
+
+      // Zoom collage
+      const collage = step3.querySelector('.collage');
+      collage.style.transform='scale(0.75)';
+      collage.style.transition='transform 1s ease';
+
+      // Slideshow images
+      const images = collageTrack.querySelectorAll('img');
+      for(let i=0;i<images.length;i++){
+        images.forEach(img=>img.style.opacity='0');
+        images[i].style.opacity='1';
+        await new Promise(res=>setTimeout(res,800));
+      }
+
+      // Reset collage + show all images
+      collage.style.transform='scale(1)';
+      images.forEach(img=>img.style.opacity='1');
+
+      // Show Flower button
+      flowerBtn.style.display='inline-block';
+    }
+
+    function showFlowers(){
+      document.querySelectorAll('.card').forEach(c=>c.style.display='none');
+      document.getElementById('flowers').style.opacity='1';
+      document.querySelectorAll('.floating-flower').forEach(f=>f.remove());
+      backFlowersBtn.style.display='block';
+
+      const flowerEmojis=['🌸','🌺','🌹','💮','🥀','🌻'];
+      for(let i=0;i<50;i++){
+        const flower=document.createElement('div');
+        flower.className='floating-flower';
+        flower.innerText=flowerEmojis[Math.floor(Math.random()*flowerEmojis.length)];
+        flower.style.left=Math.random()*100+'vw';
+        flower.style.fontSize=(1.5+Math.random()*3)+'rem';
+        flower.style.animation=`floatUp ${6+Math.random()*6}s linear forwards`;
+        flower.style.animationDelay=Math.random()*2+'s';
         document.body.appendChild(flower);
       }
     }
 
-    // Back button for flowers
-    backFlowersBtn.addEventListener('click', () => {
-      document.getElementById('flowers').style.opacity = '0';
-      document.querySelectorAll('.floating-flower').forEach(f => f.remove());
-      document.getElementById('step1').style.display = 'block';
-      backFlowersBtn.style.display = 'none';
-      typeWriter('step1-text', 80);
-      typeWriter('step1-para', 50);
+    backFlowersBtn.addEventListener('click',()=>{
+      document.getElementById('flowers').style.opacity='0';
+      document.querySelectorAll('.floating-flower').forEach(f=>f.remove());
+      document.getElementById('step3').style.display='block';
+      backFlowersBtn.style.display='none';
     });
-
-    function goBack() {
-      document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
-      document.getElementById('step1').style.display = 'block';
-      document.getElementById('flowers').style.opacity = '0';
-      document.querySelectorAll('.floating-flower').forEach(f => f.remove());
-      backFlowersBtn.style.display = 'none';
-      typeWriter('step1-text', 80);
-      typeWriter('step1-para', 50);
-    }
   </script>
 </body>
 </html>
