@@ -89,29 +89,16 @@
       cursor: pointer;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin-top: 15px;
     }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(255, 255, 255, 0.15); }
 
-    /* First Open button */
-    #openBtn {
-      background: none;
-      color: #f5f5f7;
-      border: 2px solid #f5f5f7;
-      padding: 14px 40px;
-      font-size: 1.5rem;
-      border-radius: 10px;
-      cursor: pointer;
-      z-index: 5;
-      position: relative;
-    }
-    #openBtn:hover { background: rgba(255,255,255,0.1); }
-
     .floating-flower {
-      pointer-events: none;
-      filter: drop-shadow(0 0 6px rgba(255, 200, 220, 0.6));
       position: fixed;
       bottom: -80px;
-      z-index: 9999;
+      z-index: 3;
+      pointer-events: none;
+      filter: drop-shadow(0 0 6px rgba(255, 200, 220, 0.6));
     }
 
     @keyframes floatUp {
@@ -119,10 +106,29 @@
       100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
     }
 
-    .collage { display: flex; gap: 10px; margin-top: 20px; overflow: hidden; }
-    .collage-track { display: flex; animation: scrollCollage 15s linear infinite; }
-    .collage img { width: 120px; height: 120px; object-fit: cover; border-radius: 15px; border: 2px solid #e5e5ea; box-shadow: 0 5px 15px rgba(255,255,255,0.1); }
-    @keyframes scrollCollage { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .collage {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+    .collage-track {
+      display: flex;
+      animation: scrollCollage 15s linear infinite;
+    }
+    .collage img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 15px;
+      border: 2px solid #e5e5ea;
+      box-shadow: 0 5px 15px rgba(255,255,255,0.1);
+    }
+
+    @keyframes scrollCollage {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
   </style>
 </head>
 <body>
@@ -154,16 +160,10 @@
     <img src="IMAGES/24.jpeg" />
   </div>
 
-  <!-- Background music -->
-  <audio id="bgMusic" loop>
-    <source src="IMAGES/aaaa.mp3" type="audio/mpeg">
-  </audio>
+  <div class="flowers-bg" id="flowers"></div>
 
   <div class="container">
-    <!-- First Open button -->
-    <button id="openBtn">Open</button>
-
-    <div class="card" id="step1">
+    <div class="card" id="step1" style="display:block;">
       <h1>Hey Lab 💌</h1>
       <p>I made something just for you…</p>
       <button class="btn" id="btnStart">Tap to open your surprise ✨</button>
@@ -204,20 +204,16 @@
         </div>
       </div>
       <button class="btn" onclick="showFlowers()">Flower for you!!!! 🌸</button>
+      <button class="btn" onclick="goBack()">Back ⬅️</button>
     </div>
   </div>
 
+  <!-- Background Music -->
+  <audio id="bgMusic" autoplay loop>
+    <source src="IMAGES/music.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
-    const bgMusic = document.getElementById('bgMusic');
-    const openBtn = document.getElementById('openBtn');
-
-    // First open button
-    openBtn.addEventListener('click', () => {
-      openBtn.style.display = 'none';
-      document.getElementById('step1').style.display = 'block';
-      bgMusic.play().catch(e => console.log("Autoplay blocked:", e));
-    });
-
     document.getElementById('btnStart').addEventListener('click', showMonthsary);
 
     function showMonthsary() {
@@ -231,24 +227,19 @@
     }
 
     function showFlowers() {
-      document.querySelectorAll('.card').forEach(c => c.style.display = 'block');
+      document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
       document.getElementById('flowers').style.opacity = '1';
       document.querySelectorAll('.floating-flower').forEach(f => f.remove());
 
       const flowerEmojis = ['🌸','🌺','🌹','💮','🥀','🌻'];
-      const colors = ['#ff69b4', '#ff1493', '#ffb6c1', '#ff4500', '#ffd700', '#ff6347', '#da70d6'];
-
-      for (let i = 0; i < 60; i++) {
+      for (let i = 0; i < 50; i++) {
         const flower = document.createElement('div');
         flower.className = 'floating-flower';
-        flower.innerText = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+        flower.innerText = flowerEmojis[Math.floor(Math.random()*flowerEmojis.length)];
         flower.style.left = Math.random() * 100 + 'vw';
         flower.style.fontSize = (1.5 + Math.random() * 3) + 'rem';
-        flower.style.color = colors[Math.floor(Math.random() * colors.length)];
-        const duration = 6 + Math.random() * 6;
-        const delay = Math.random() * 2;
-        flower.style.animation = `floatUp ${duration}s linear forwards`;
-        flower.style.animationDelay = `${delay}s`;
+        flower.style.animation = `floatUp ${6 + Math.random()*6}s linear forwards`;
+        flower.style.animationDelay = Math.random() * 2 + 's';
         document.body.appendChild(flower);
       }
     }
