@@ -135,7 +135,7 @@
     opacity:1;
     transition:opacity 0.5s ease, transform 0.5s ease;
   }
-  @keyframes scrollCollage {0%{transform:translateX(0);} 100%{transform:translateX(-50%);}}
+  @keyframes scrollCollage {0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
 
   #backFlowersBtn {
     position:fixed;
@@ -158,7 +158,7 @@
     display:none;
     position:fixed;
     inset:0;
-    background:#000;
+    background: rgba(0,0,0,0.6); /* semi-transparent to show marquee behind */
     z-index:10;
     display:flex;
     align-items:center;
@@ -166,6 +166,7 @@
     overflow:hidden;
   }
   #slideshowOverlay img {
+    position:absolute; /* overlay above marquee */
     max-width:80vw;
     max-height:80vh;
     object-fit:cover;
@@ -178,6 +179,7 @@
 
 <!-- Background collage -->
 <div class="bg-collage" id="bgCollage">
+  <!-- Add 24 images here -->
   <img src="IMAGES/1.jpeg" />
   <img src="IMAGES/2.jpeg" />
   <img src="IMAGES/3.jpeg" />
@@ -256,10 +258,8 @@
   </div>
 </div>
 
-<!-- Back button for flowers -->
 <button id="backFlowersBtn">⬅️</button>
 
-<!-- Slideshow overlay -->
 <div id="slideshowOverlay">
   <img id="slideshowImg" src="" />
 </div>
@@ -269,126 +269,122 @@
 </audio>
 
 <script>
-  const bgMusic = document.getElementById('bgMusic');
-  const openBtn = document.getElementById('openBtn');
-  const backFlowersBtn = document.getElementById('backFlowersBtn');
+const bgMusic = document.getElementById('bgMusic');
+const openBtn = document.getElementById('openBtn');
+const backFlowersBtn = document.getElementById('backFlowersBtn');
 
+document.getElementById('step1').style.display='none';
+document.getElementById('step2').style.display='none';
+document.getElementById('step3').style.display='none';
+
+function typeWriterPromise(elementId,speed=50){
+  return new Promise(resolve=>{
+    const el=document.getElementById(elementId);
+    const text=el.getAttribute('data-text');
+    el.innerHTML='';
+    for(let i=0;i<text.length;i++){
+      const span=document.createElement('span');
+      span.innerText=text[i];
+      span.style.opacity='0';
+      el.appendChild(span);
+    }
+    let i=0;
+    const timer=setInterval(()=>{
+      const span=el.children[i];
+      span.style.opacity='1';
+      i++;
+      if(i>=text.length){ clearInterval(timer); resolve(); }
+    },speed);
+  });
+}
+
+openBtn.addEventListener('click', async()=>{
+  openBtn.style.display='none';
+  document.getElementById('step1').style.display='block';
+  bgMusic.play().catch(e=>console.log("Autoplay blocked:",e));
+  await typeWriterPromise('step1-text',80);
+  await typeWriterPromise('step1-para',50);
+});
+
+document.getElementById('btnStart').addEventListener('click',showMonthsary);
+
+async function showMonthsary(){
   document.getElementById('step1').style.display='none';
+  document.getElementById('step2').style.display='block';
+  await typeWriterPromise('step2-text',80);
+  await typeWriterPromise('step2-para',50);
+}
+
+async function showMessage(){
   document.getElementById('step2').style.display='none';
-  document.getElementById('step3').style.display='none';
+  await showStep3WithSlideshowOverlay();
+}
 
-  function typeWriterPromise(elementId,speed=50){
-    return new Promise(resolve=>{
-      const el=document.getElementById(elementId);
-      const text=el.getAttribute('data-text');
-      el.innerHTML='';
-      for(let i=0;i<text.length;i++){
-        const span=document.createElement('span');
-        span.innerText=text[i];
-        span.style.opacity='0';
-        el.appendChild(span);
-      }
-      let i=0;
-      const timer=setInterval(()=>{
-        const span=el.children[i];
-        span.style.opacity='1';
-        i++;
-        if(i>=text.length){ clearInterval(timer); resolve(); }
-      },speed);
-    });
+async function showStep3WithSlideshowOverlay(){
+  const step3=document.getElementById('step3');
+  step3.style.display='block';
+  const flowerBtn = step3.querySelector('.btn[onclick="showFlowers()"]');
+  flowerBtn.style.display='none';
+
+  await typeWriterPromise('step3-para',40);
+
+  // Show slideshow overlay on top but keep step3 visible
+  const slideshowOverlay=document.getElementById('slideshowOverlay');
+  const slideshowImg=document.getElementById('slideshowImg');
+  slideshowOverlay.style.display='flex';
+
+  const images=[
+    'IMAGES/3.jpeg','IMAGES/4.jpg','IMAGES/5.jpeg','IMAGES/6.jpeg',
+    'IMAGES/7.jpg','IMAGES/8.jpg','IMAGES/9.jpeg','IMAGES/10.jpeg',
+    'IMAGES/11.jpeg','IMAGES/12.jpeg','IMAGES/13.jpeg','IMAGES/14.jpeg',
+    'IMAGES/15.jpeg','IMAGES/16.jpeg','IMAGES/17.jpeg','IMAGES/18.jpeg',
+    'IMAGES/19.jpeg','IMAGES/20.jpeg','IMAGES/21.jpg','IMAGES/22.jpeg',
+    'IMAGES/23.jpg','IMAGES/24.jpeg'
+  ];
+
+  // preload images
+  images.forEach(src=>{ const img=new Image(); img.src=src; });
+
+  for(let i=0;i<images.length;i++){
+    slideshowImg.src=images[i];
+    slideshowImg.style.opacity='0';
+    slideshowImg.style.transform='scale(0.8)';
+    await new Promise(res=>setTimeout(res,50));
+    slideshowImg.style.opacity='1';
+    slideshowImg.style.transform='scale(1.1)';
+    await new Promise(res=>setTimeout(res,1200));
+    slideshowImg.style.opacity='0';
   }
 
-  openBtn.addEventListener('click', async()=>{
-    openBtn.style.display='none';
-    document.getElementById('step1').style.display='block';
-    bgMusic.play().catch(e=>console.log("Autoplay blocked:",e));
-    await typeWriterPromise('step1-text',80);
-    await typeWriterPromise('step1-para',50);
-  });
+  slideshowOverlay.style.display='none';
+  flowerBtn.style.display='inline-block';
+}
 
-  document.getElementById('btnStart').addEventListener('click',showMonthsary);
+function showFlowers(){
+  document.querySelectorAll('.card').forEach(c=>c.style.display='none');
+  document.getElementById('flowers').style.opacity='1';
+  document.querySelectorAll('.floating-flower').forEach(f=>f.remove());
+  backFlowersBtn.style.display='block';
 
-  async function showMonthsary(){
-    document.getElementById('step1').style.display='none';
-    document.getElementById('step2').style.display='block';
-    await typeWriterPromise('step2-text',80);
-    await typeWriterPromise('step2-para',50);
+  const flowerEmojis=['🌸','🌺','🌹','💮','🥀','🌻'];
+  for(let i=0;i<50;i++){
+    const flower=document.createElement('div');
+    flower.className='floating-flower';
+    flower.innerText=flowerEmojis[Math.floor(Math.random()*flowerEmojis.length)];
+    flower.style.left=Math.random()*100+'vw';
+    flower.style.fontSize=(1.5+Math.random()*3)+'rem';
+    flower.style.animation=`floatUp ${6+Math.random()*6}s linear forwards`;
+    flower.style.animationDelay=Math.random()*2+'s';
+    document.body.appendChild(flower);
   }
+}
 
-  async function showMessage(){
-    document.getElementById('step2').style.display='none';
-    await showStep3WithSlideshowOverlay();
-  }
-
-  async function showStep3WithSlideshowOverlay(){
-    const step3=document.getElementById('step3');
-    step3.style.display='block';
-    const flowerBtn = step3.querySelector('.btn[onclick="showFlowers()"]');
-    flowerBtn.style.display='none';
-
-    // 1️⃣ Typewriter for paragraph
-    await typeWriterPromise('step3-para',40);
-
-    // 2️⃣ Hide step3 temporarily
-    step3.style.display='none';
-
-    // 3️⃣ Show slideshow overlay
-    const slideshowOverlay = document.getElementById('slideshowOverlay');
-    const slideshowImg = document.getElementById('slideshowImg');
-    slideshowOverlay.style.display='flex';
-
-    const images = [
-      'IMAGES/3.jpeg','IMAGES/4.jpg','IMAGES/5.jpeg','IMAGES/6.jpeg',
-      'IMAGES/7.jpg','IMAGES/8.jpg','IMAGES/9.jpeg','IMAGES/10.jpeg',
-      'IMAGES/11.jpeg','IMAGES/12.jpeg','IMAGES/13.jpeg','IMAGES/14.jpeg',
-      'IMAGES/15.jpeg','IMAGES/16.jpeg','IMAGES/17.jpeg','IMAGES/18.jpeg',
-      'IMAGES/19.jpeg','IMAGES/20.jpeg','IMAGES/21.jpg','IMAGES/22.jpeg',
-      'IMAGES/23.jpg','IMAGES/24.jpeg'
-    ];
-
-    for(let i=0;i<images.length;i++){
-      slideshowImg.src = images[i];
-      slideshowImg.style.opacity='0';
-      slideshowImg.style.transform='scale(0.8)';
-      await new Promise(res=>setTimeout(res,50));
-      slideshowImg.style.opacity='1';
-      slideshowImg.style.transform='scale(1.1)';
-      await new Promise(res=>setTimeout(res,1200));
-      slideshowImg.style.opacity='0';
-    }
-
-    // 4️⃣ Hide overlay, restore step3 and show flower button
-    slideshowOverlay.style.display='none';
-    step3.style.display='block';
-    flowerBtn.style.display='inline-block';
-  }
-
-  function showFlowers(){
-    document.querySelectorAll('.card').forEach(c=>c.style.display='none');
-    document.getElementById('flowers').style.opacity='1';
-    document.querySelectorAll('.floating-flower').forEach(f=>f.remove());
-    backFlowersBtn.style.display='block';
-
-    const flowerEmojis=['🌸','🌺','🌹','💮','🥀','🌻'];
-    for(let i=0;i<50;i++){
-      const flower=document.createElement('div');
-      flower.className='floating-flower';
-      flower.innerText=flowerEmojis[Math.floor(Math.random()*flowerEmojis.length)];
-      flower.style.left=Math.random()*100+'vw';
-      flower.style.fontSize=(1.5+Math.random()*3)+'rem';
-      flower.style.animation=`floatUp ${6+Math.random()*6}s linear forwards`;
-      flower.style.animationDelay=Math.random()*2+'s';
-      document.body.appendChild(flower);
-    }
-  }
-
-  backFlowersBtn.addEventListener('click',()=>{
-    document.getElementById('flowers').style.opacity='0';
-    document.querySelectorAll('.floating-flower').forEach(f=>f.remove());
-    document.getElementById('step3').style.display='block';
-    backFlowersBtn.style.display='none';
-  });
-
+backFlowersBtn.addEventListener('click',()=>{
+  document.getElementById('flowers').style.opacity='0';
+  document.querySelectorAll('.floating-flower').forEach(f=>f.remove());
+  document.getElementById('step3').style.display='block';
+  backFlowersBtn.style.display='none';
+});
 </script>
 </body>
 </html>
