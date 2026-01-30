@@ -167,11 +167,16 @@
 }
 
 #slideshowOverlay img {
-  max-width:80vw;
-  max-height:60vh;
-  object-fit:cover;
-  opacity:0;
-  transition:opacity 0.8s ease, transform 0.8s ease;
+  max-width: 80vw;
+  max-height: 60vh;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+
+  /* Added frame like marquee */
+  border-radius: 15px;
+  border: 2px solid #e5e5ea;
+  box-shadow: 0 5px 15px rgba(255,255,255,0.1);
 }
 
 </style>
@@ -389,4 +394,5 @@ backFlowersBtn.addEventListener('click',()=>{
 </script>
 </body>
 </html>
+
 
