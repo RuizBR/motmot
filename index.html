@@ -142,6 +142,25 @@
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
+
+    /* Back button for flower screen */
+    #backFlowersBtn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 10;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: none; /* hidden by default */
+    }
+    #backFlowersBtn:hover {
+      background: rgba(255,255,255,0.4);
+    }
   </style>
 </head>
 <body>
@@ -220,8 +239,12 @@
         </div>
       </div>
       <button class="btn" onclick="showFlowers()">Flower for you!!!! 🌸</button>
+      <button class="btn" onclick="goBack()">Back ⬅️</button>
     </div>
   </div>
+
+  <!-- Back button for flowers -->
+  <button id="backFlowersBtn">⬅️</button>
 
   <!-- Background Music -->
   <audio id="bgMusic" autoplay loop>
@@ -231,6 +254,7 @@
   <script>
     const bgMusic = document.getElementById('bgMusic');
     const openBtn = document.getElementById('openBtn');
+    const backFlowersBtn = document.getElementById('backFlowersBtn');
 
     // Hide all cards initially
     document.getElementById('step1').style.display = 'none';
@@ -262,6 +286,8 @@
       document.getElementById('flowers').style.opacity = '1';
       document.querySelectorAll('.floating-flower').forEach(f => f.remove());
 
+      backFlowersBtn.style.display = 'block'; // show back button
+
       const flowerEmojis = ['🌸','🌺','🌹','💮','🥀','🌻'];
       for (let i = 0; i < 50; i++) {
         const flower = document.createElement('div');
@@ -275,11 +301,20 @@
       }
     }
 
+    // Back button for flowers
+    backFlowersBtn.addEventListener('click', () => {
+      document.getElementById('flowers').style.opacity = '0';
+      document.querySelectorAll('.floating-flower').forEach(f => f.remove());
+      document.getElementById('step1').style.display = 'block';
+      backFlowersBtn.style.display = 'none';
+    });
+
     function goBack() {
       document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
       document.getElementById('step1').style.display = 'block';
       document.getElementById('flowers').style.opacity = '0';
       document.querySelectorAll('.floating-flower').forEach(f => f.remove());
+      backFlowersBtn.style.display = 'none';
     }
   </script>
 </body>
